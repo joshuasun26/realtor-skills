@@ -1,0 +1,115 @@
+---
+department: sphere
+name: home-anniversary
+description: >
+  Find past clients whose home purchase anniversary is landing, and draft the anniversary
+  touch — including the five, seven, and ten year marks where a past client is most likely
+  to move again. Trigger on "home anniversaries", "closing anniversaries", "who bought a
+  year ago", "anniversary check", or as part of sphere-daily. Do NOT trigger for birthdays
+  — that is birthday-watch.
+---
+
+# Home Anniversary — the highest-probability seller in the database
+
+A past client at year five, seven, or ten is statistically the most likely person in an
+agent's database to transact next. Most agents never touch them because there is no CRM
+field reminding them to.
+
+Reads `data/contacts.csv` (the `close_date` and `property_address` fields),
+`profile/VOICE.md`, `profile/AGENT.md`.
+
+---
+
+## The check
+
+Match on `close_date`. Only one format is valid: `YYYY-MM-DD` (the year is required — it
+is what determines which anniversary year this is). If a row's `close_date` is blank or in
+any other format (e.g. `3/3/2019`, `March 2019`), do not guess the year: skip that row,
+add it to the "missing/unreadable close_date" count reported to the agent below, and do
+not include it in any year grouping until it is corrected. Return anyone whose anniversary
+lands today or in the next 14 days, grouped by year:
+
+- **Year 1** — the warmest. They still remember the transaction vividly.
+- **Years 2 to 4** — maintenance cadence. Keep the relationship alive.
+- **Years 5, 7, 10** — flag these separately and prominently. This is where the next
+  listing lives.
+- **Year 10+** — long-hold owners. Different conversation, often about an adult child
+  buying, a rental, or downsizing.
+
+Exclude anyone tagged `optout: all`, or `optout: text`/`optout: call` if that is the
+channel this message would use. Note anyone missing a `close_date` (see above) — filling
+those in is usually the highest-value data fix in the whole database.
+
+## What to send, by year
+
+**Year 1:** purely warm. "One year in that house." Reference something specific about the
+transaction or the property if the file holds it. **No ask.**
+
+**Years 2 to 4:** warm, plus at most one genuinely useful thing — a reminder that they can
+ask about a contractor, or an offer to send the current numbers for their street if they
+are ever curious. Soft, once.
+
+**Years 5, 7, 10:** this one can carry a real conversation, because it is genuinely
+relevant. Frame it as information, not a pitch: what has changed on their street since
+they bought, and an offer to walk them through where they stand with no obligation.
+
+**Never lead with a valuation number.** Do not send "your home is now worth $X." An
+unsolicited automated valuation is frequently wrong, it anchors the client against the
+agent when it is high, and it turns a relationship touch into a lead-gen tactic they can
+smell. Offer the conversation, not the number.
+
+## Draft individually
+
+Same rule as birthdays: **no template with a merge field.** Each message references
+their actual property, their actual transaction, or something in their notes. If the file
+holds nothing, keep it short and honest.
+
+Run `agent-voice`. One to four sentences. Scan for banned words.
+
+## The escalation
+
+For year 5, 7, and 10 clients, propose a **call**, not a text. That is the year where a
+conversation converts and a text gets a thumbs-up emoji.
+
+Rank the list so the agent sees the two or three worth picking up the phone for today.
+
+## Approval and sending
+
+Numbered list, recipient and full copy, in a file. Wait for the agent's explicit go for
+this batch. Approval never carries to the next batch.
+
+Report what went and what did not, by count and name. Update `last_touch` and log to
+`records/sent-log.md`.
+
+## Compliance
+
+- Any market number attached to an anniversary message routes through `market-pull` and
+  `source-check` — MLS-sourced, dated. No aggregator estimates.
+- Nothing describing the neighborhood, its character, or its residents.
+  `compliance-check` if the message grows past a few sentences.
+- Do not contact a past client who is currently represented by another agent.
+
+## Chains from / into
+
+Called by `sphere-daily`. Reads `contact-import` output and `agent-voice`. May pull from
+`market-pull` for the year 5/7/10 conversation.
+
+---
+
+<!-- self-improvement-loop v1 -->
+
+## Self-improvement loop
+
+Before ending a run of this skill, review the run:
+
+1. Did any step fail, stall, or need a workaround you had to invent?
+2. Did the user correct, reject, or rewrite something meaningful in the output?
+3. Did you discover something a future run would want to know (a path that moved, a
+   tool that replaced another, a preference they stated out loud)?
+
+If yes to any, propose a specific edit to this SKILL.md in one or two lines and ask
+whether to apply it. Propose only changes that would alter a future run's behavior --
+skip cosmetic rewording, and never propose more than two edits at once.
+
+Do not edit this file without their go-ahead. If they say no, drop it and do not re-raise
+the same suggestion in a later run of the same session.

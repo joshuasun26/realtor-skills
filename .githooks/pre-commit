@@ -1,0 +1,35 @@
+#!/bin/sh
+# Pre-commit hook: keep atlas/index.html in sync with plugins/realtor-skills/skills/*/SKILL.md.
+#
+# This is a repo-relative hook (lives in .githooks/, not .git/hooks/) so it travels with
+# the repo when it is extracted to its own git repo. It is NOT active until someone runs
+# the one-time setup command below inside a real git checkout of this repo. See
+# atlas/README.md for that command.
+#
+# What it does: rebuilds atlas/index.html, and if the rebuild changed the file, re-stages
+# it so the commit includes the fresh Atlas automatically.
+
+set -e
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT"
+
+if ! command -v python >/dev/null 2>&1; then
+  if command -v python3 >/dev/null 2>&1; then
+    PYTHON=python3
+  else
+    echo "pre-commit: no python/python3 found, skipping atlas rebuild" >&2
+    exit 0
+  fi
+else
+  PYTHON=python
+fi
+
+"$PYTHON" atlas/build.py
+
+if ! git diff --quiet -- atlas/index.html; then
+  git add atlas/index.html
+  echo "pre-commit: atlas/index.html rebuilt and re-staged"
+fi
+
+exit 0

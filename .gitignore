@@ -1,0 +1,26 @@
+# The client's own business data NEVER belongs in this repo.
+# These are the working folders the skills read and write on the agent's machine.
+data/
+daily/
+records/
+listings/
+sequences/
+profile/
+content/
+
+# Anything that could carry a contact
+*.csv
+*.vcf
+*.xlsx
+
+# Usage tally, if it was ever enabled (see plugins/realtor-skills/hooks/README.md)
+.realtor-skills/
+*.jsonl
+
+# Local noise
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+.venv/
+node_modules/

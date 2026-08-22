@@ -1,0 +1,125 @@
+---
+department: sphere
+name: sphere-daily
+description: >
+  Orchestrator. The single morning run that produces one approval list for the day —
+  birthdays, home anniversaries, follow-ups that are due, and the one relationship worth a
+  phone call — all drafted and held for the agent's go. Trigger on "run my morning", "who
+  do I contact today", "daily nurture", "run the sphere", "my daily list", "good morning".
+  Use the individual skills when the agent wants just birthdays or just follow-ups.
+---
+
+# Sphere Daily — one list, once a day, everything drafted
+
+This is the routine that makes the whole system feel like it works. Five minutes of the
+agent's morning, one list, everything already written.
+
+Its enemy is volume. A daily list of forty items gets ignored by day three. **Cap it.**
+
+---
+
+## The chain
+
+Step 0, before the chain runs: `revocation-watch` scans inbound replies and tags any
+opt-outs. Its NO overrides everything below — a revoked contact appears in no list
+this skill produces.
+
+```
+sphere-daily
+├─ 1. birthday-watch      → today's birthdays, drafted
+├─ 2. home-anniversary    → today's closing anniversaries, drafted
+├─ 3. followup-queue      → leads and clients whose next touch is due
+├─ 4. sphere-message × N  → the individual drafting for each item above
+└─ 5. one approval list   → held, never auto-sent
+```
+
+Steps 1 to 3 gather. Step 4 drafts. Step 5 is where the agent spends their five minutes.
+
+## The cap — this is the design rule
+
+**No more than 10 items on the list, and no more than 3 flagged as calls.**
+
+If the queue produces more, rank and hold the rest. Ranking order:
+
+1. Anything time-bound today — a birthday is today or it is nothing
+2. Tier A relationships with a real reason to reach out
+3. Year 5, 7, and 10 home anniversaries
+4. Active clients and consented leads whose next touch is due
+5. Everything else
+
+**Tie within a tier:** when two items land in the same rank tier (e.g. two Year 7
+anniversaries, or two Tier A birthdays), break the tie by longest time since
+`last_touch` in `data/contacts.csv` (longest-idle contact goes first). If `last_touch`
+is also blank or tied, break it alphabetically by last name, then first name. Apply
+the same tiebreak when deciding which 3 items get the call flag.
+
+Tell the agent when items were held back and how many. "6 today, 14 held" is honest and
+keeps them trusting the cap.
+
+## The list format
+
+One file, `daily/<YYYY-MM-DD>.md`, not a wall of chat text. For each item:
+
+```
+### N. [Name] — [why, in five words]
+Channel: text | email | call
+Context: [the one line from the database that explains this]
+
+[the full drafted message]
+```
+
+Then at the top of the file, before the items:
+
+- **The one call.** Name a single person and one line on why today. Agents do not make
+  the calls unless someone tells them which call. This line is the most valuable output
+  of the entire skill.
+- The counts: items today, items held, contacts excluded for consent or opt-out.
+
+## The approval gate
+
+**Nothing sends. Ever, automatically.**
+
+The agent replies with the numbers they approve, or edits the file directly and says go.
+
+- Approval is per batch, per session. Today's yes is not tomorrow's yes.
+- Silence, "looks good", or ambiguity is not approval. Ask once, in one line, and wait.
+- If they approve 6 and you later added a 7th, the 7th is unapproved.
+- After sending, report exactly what went and what did not, by count and by name. Never
+  report a send as complete when a call failed.
+
+## After the send
+
+- Update `last_touch` in `data/contacts.csv` for everyone contacted
+- Append every message to `records/sent-log.md` with date, channel, and copy
+- Note anything the agent rewrote — that rewrite goes into `profile/VOICE.md` under
+  Corrections, and it is the most valuable thing this run produced
+
+## Keeping it honest over time
+
+Once a month, report the actual numbers: how many days the list was run, how many messages
+approved, how many sent, how many produced a reply. If the reply rate is low, say so and
+propose one change, not five. If the agent has not run it in two weeks, say that too
+rather than quietly continuing to generate lists nobody reads.
+
+A routine that runs and is never read is worse than no routine, because it looks like a
+system while producing nothing.
+
+---
+
+<!-- self-improvement-loop v1 -->
+
+## Self-improvement loop
+
+Before ending a run of this skill, review the run:
+
+1. Did any step fail, stall, or need a workaround you had to invent?
+2. Did the user correct, reject, or rewrite something meaningful in the output?
+3. Did you discover something a future run would want to know (a path that moved, a
+   tool that replaced another, a preference they stated out loud)?
+
+If yes to any, propose a specific edit to this SKILL.md in one or two lines and ask
+whether to apply it. Propose only changes that would alter a future run's behavior --
+skip cosmetic rewording, and never propose more than two edits at once.
+
+Do not edit this file without their go-ahead. If they say no, drop it and do not re-raise
+the same suggestion in a later run of the same session.

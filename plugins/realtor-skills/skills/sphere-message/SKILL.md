@@ -1,0 +1,113 @@
+---
+department: sphere
+name: sphere-message
+description: >
+  Draft one personal message to one specific contact, in the agent's voice, using
+  everything the database already knows about that relationship. The atomic unit that
+  every other sphere and follow-up skill calls. Trigger on "write to [name]", "what do I
+  say to [name]", "draft a message for [name]", "reach out to [name]", or as a sub-step of
+  any sphere or follow-up skill. Do NOT trigger for a batch — that is sphere-daily or
+  followup-queue.
+---
+
+# Sphere Message — one person, one message
+
+The smallest useful skill in this library, and the one called most often. Every batch skill
+here is really this skill run N times with different context.
+
+Reads `data/contacts.csv`, `profile/VOICE.md`, `profile/AGENT.md`, and
+`records/sent-log.md`.
+
+---
+
+## Before drafting
+
+1. **Pull everything the file knows about this person.** Relationship, source, close date,
+   property, birthday, tags, notes, last touch.
+2. **Read the last two or three things the agent sent them**, from `records/sent-log.md`.
+   Repeating a message from six weeks ago is the fastest way to look automated.
+3. **Check consent tier and opt-out.** If tagged `optout: all`, say so and stop — no
+   message, no exception, on any channel. If tagged `optout: text`, `optout: email`, or
+   `optout: call`, stop only if the channel this draft would use matches the tagged one;
+   otherwise proceed on the remaining channel and note the restriction. If tier D /
+   `unknown` consent, say that an automated or templated message is not appropriate and
+   that this should be the agent writing personally, then let them decide.
+4. **Ask the agent for the occasion** if it is not obvious. "Just checking in" is not an
+   occasion, and a message with no reason to exist is the one that does not get answered.
+
+## The message
+
+**One specific thing.** Every good message to a person you know contains something that
+could only be said to them. Their kitchen renovation, the dog, the job they were nervous
+about, the street they live on, the fact that they close five years ago this month.
+
+If the file holds nothing specific, say so to the agent and ask for one detail. That
+30-second question produces a message that works instead of one that does not.
+
+**Structure that works for a text:**
+- The specific thing, first
+- The reason for reaching out, if there is one
+- One easy question, or nothing at all
+
+**Length:** shorter than feels right. Two or three sentences for a text. Six or seven
+lines for an email. The most common failure in agent outreach is length, not tone.
+
+**Voice:** run `agent-voice`. Match register to the relationship — a past client from
+seven years ago is not written to the same way as a friend. Scan for banned words before
+delivering.
+
+## What to leave out
+
+- No pitch on a relationship touch. If the message has both warmth and an ask, the reader
+  only registers the ask.
+- No "just checking in", "touching base", "circling back", "I hope this finds you well",
+  "reaching out because" — these are the phrases that mark a message as mass-sent even
+  when it is not.
+- No market statistic unless it is MLS-sourced and dated via `source-check`.
+- No claim about the agent's business, results, or history that is not in
+  `profile/AGENT.md`.
+- No promise the agent has not made.
+
+## Channel
+
+Ask, or read it from the contact's history. Rough guide, and the agent overrides it:
+
+- **Text** — existing relationships, short, time-sensitive, warm
+- **Email** — anything with an attachment, anything long, anything a person may want to
+  keep
+- **Call** — high-value relationships, anniversaries at year 5/7/10, and anything the
+  agent has been putting off. Say so when a call is the right answer, even though a draft
+  is easier to produce.
+- **Handwritten** — the top handful. Say when it is worth it.
+
+## Approval
+
+Show the copy. Wait for the agent's go. One message, one approval — and approval on this
+message is not approval on the next one.
+
+After sending, log to `records/sent-log.md` and update `last_touch`.
+
+## Chains from / into
+
+Called by `sphere-daily`, `birthday-watch`, `home-anniversary`, `followup-queue`,
+`open-house-followup`. Uses `agent-voice`, `source-check`.
+
+---
+
+<!-- self-improvement-loop v1 -->
+
+## Self-improvement loop
+
+Before ending a run of this skill, review the run:
+
+1. Did any step fail, stall, or need a workaround you had to invent?
+2. Did the user correct, reject, or rewrite something meaningful in the output?
+3. Did you discover something a future run would want to know (a path that moved, a
+   tool that replaced another, a preference they stated out loud)?
+
+If yes to any, propose a specific edit to this SKILL.md in one or two lines and ask
+whether to apply it. Propose only changes that would alter a future run's behavior --
+skip cosmetic rewording, and never propose more than two edits at once.
+
+Do not edit this file without their go-ahead. If they say no, drop it and do not re-raise
+the same suggestion in a later run of the same session.

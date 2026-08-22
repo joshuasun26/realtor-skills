@@ -1,0 +1,35 @@
+{
+  "name": "realtor-skills",
+  "owner": {
+    "name": "Joshua Sun",
+    "url": "https://joshuasun.co"
+  },
+  "description": "Working AI skills for real estate agents. Listing marketing, open houses, market briefs, sphere nurture, and follow-up, installed on your own machine.",
+  "version": "0.1.0",
+  "plugins": [
+    {
+      "name": "realtor-skills",
+      "source": "./plugins/realtor-skills",
+      "displayName": "Realtor Skills",
+      "description": "Listing packages, open house packages, MLS-sourced market briefs, sphere nurture, and follow-up. Small composable skills that chain into full workflows.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Joshua Sun",
+        "url": "https://joshuasun.co"
+      },
+      "homepage": "https://joshuasun.co/aitools",
+      "license": "UNLICENSED",
+      "category": "productivity",
+      "keywords": [
+        "real-estate",
+        "realtor",
+        "listings",
+        "open-house",
+        "marketing",
+        "crm",
+        "follow-up"
+      ],
+      "defaultEnabled": true
+    }
+  ]
+}

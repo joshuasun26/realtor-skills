@@ -1,0 +1,23 @@
+{
+  "_comment_1": "USAGE TRACKING — DISABLED BY DEFAULT. This file is named hooks.json.disabled ON PURPOSE.",
+  "_comment_2": "Claude Code auto-discovers a plugin's hooks at the exact path hooks/hooks.json, whether or not plugin.json declares a \"hooks\" key. Renaming the extension is what keeps this INACTIVE. To enable it, rename this file to hooks.json (do not just add a manifest key — that alone does nothing, since the manifest key only overrides the path, it does not gate loading).",
+  "_comment_3": "Before enabling this on any CLIENT machine you MUST disclose it in the client agreement. See hooks/README.md.",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python",
+            "args": [
+              "${CLAUDE_PLUGIN_ROOT}/hooks/tally_skill_run.py"
+            ],
+            "async": true,
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
