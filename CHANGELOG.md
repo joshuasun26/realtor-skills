@@ -9,6 +9,47 @@ hasn't shipped to an outside client so there's nothing to version against.
 
 ---
 
+## 2026-08-24
+
+Eval pass on the three chain skills that had never been run, plus the fixes they turned
+up. No new skills. Skill count unchanged at 33.
+
+- **The last three untested chain skills are now tested.** `agent-profile`,
+  `buydown-math`, and `listing-flyer` each ran twice as independent live sessions against
+  fake listing, contact, and rate-sheet data, and the two runs were diffed. Full results
+  in `EVALS.md`.
+- **`buydown-math` held on safety.** Asked for a 5% / 10% / 20% down-payment ladder off a
+  rate sheet with no mortgage insurance quote, both runs blocked the rows that needed MI
+  instead of estimating one, quoted no APR, and carried the lender's NMLS ID and the full
+  assumption set into the disclaimer. Every payment figure it produced was re-derived
+  independently and matched to the cent.
+- **`buydown-math` gate fixed: the pricing convention now blocks.** The gate required the
+  lender's pricing convention but never said what to do when it was missing, so both runs
+  picked their own base rate off the sheet and disclosed the choice. Which row you call
+  the base rate changes every number on the piece, so a disclosed guess is still a guess.
+  It now blocks and routes the question to the lender. Same pass also defined "saved over
+  5 years", set a rounding convention, added a rule for a contribution larger than the
+  cheapest rate on the sheet, required today's date to be read rather than inferred, and
+  added a hard rule that a temporary 2-1 or 3-2-1 buydown can never be shown as a single
+  payment.
+- **`agent-profile` fixed: the file now has a fixed shape.** Two runs on identical input
+  produced different section names in different places, and only one of them wrote the
+  corrections log. The canonical section list and order are now written into the skill,
+  the corrections log is required on every run that changes anything, and `Last updated`
+  comes from the system date. Its Downstream list was also wrong in both directions and is
+  now correct. Partners now collects the lender's pricing convention and the MI provider,
+  which `buydown-math` requires and the profile was never asking for.
+- **`listing-flyer` fixed: the pre-ship list is a checklist, not a judgment call.** Both
+  runs correctly blocked the flyer on unconfirmed broker disclosures and missing brand
+  assets, but only one of them noticed the profile was 231 days stale. The staleness
+  check, the disclosure gate, and an asset-existence check are now explicit, ordered
+  steps, and the 300 DPI rule is now arithmetic with minimum pixel dimensions instead of
+  an eyeball call.
+- **Atlas pre-commit hook actually turned on.** The hook and the GitHub Action shipped on
+  2026-08-22, but `core.hooksPath` had never been set in this checkout, so the local hook
+  was inert. Now set. The Atlas rebuild was also confirmed byte-for-byte reproducible: 33
+  skills, 7 departments, 202 connections.
+
 ## 2026-08-22
 
 MVP shipping pass: install-flow hardening, flagship chain eval pass, Atlas auto-rebuild,

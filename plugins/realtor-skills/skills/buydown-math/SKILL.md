@@ -26,10 +26,19 @@ the piece does not ship.** Not hedged, not rounded, not "approximately". Blocked
 
 1. **A dated rate sheet from the agent's lender partner, dated within 2 business days.**
    Not last week's. Not the one in the last listing folder. Not a rate from a website.
-   The lender's own dated sheet, obtained this session.
-2. **The pricing convention written down.** Rate sheets price in rebate and cost columns.
-   State exactly which column you read and the rule you applied to pick the base rate.
-   If the agent's lender has a house convention, it belongs in `profile/AGENT.md`.
+   The lender's own dated sheet, obtained this session. **Read today's date off the
+   system to age it — never infer the date from the filename, the folder, or the
+   contents of the sheet.** If you cannot establish today's date, the piece blocks.
+2. **The pricing convention written down, BEFORE this run.** Rate sheets price in rebate
+   and cost columns, and which row you call the base rate changes every number on the
+   piece. The lender's convention lives in `profile/AGENT.md` under Partners.
+   **If it is not already recorded there, this item is MISSING and the piece blocks.**
+   Do not pick a convention yourself and disclose it — a disclosed guess is still a
+   guess, and the next run will pick a different one off the same sheet. Route it back:
+   *"Which row on your sheet do you price from — the zero-cost par rate, or a target
+   rebate? I will write it down once and use it every time."* Record their answer in
+   `profile/AGENT.md`, then re-run.
+   State in the output exactly which column you read and the recorded rule you applied.
 3. **A dated mortgage insurance quote** from a named provider, if the scenario has MI.
 4. **The full assumption set:** price, down payment, loan amount, term, product, credit
    score, DTI, occupancy, property type, impounds or not, and whether the buydown is
@@ -54,6 +63,27 @@ The comparison that lands is **same dollars, three destinations**:
 | Buyer's cash to close | | | |
 | Saved over 5 years | | | |
 
+**Defined, so two runs on the same inputs produce the same table:**
+
+- The **baseline** is the same property with no seller contribution applied, at the
+  recorded convention's base rate and the same down payment. State the baseline payment
+  in words underneath the table.
+- **Buyer's payment** is principal and interest, plus mortgage insurance when the
+  scenario has MI and a dated MI quote exists. Say in the row label exactly what is in
+  it.
+- **Saved over 5 years** is `(baseline payment − scenario payment) × 60`. Nothing else —
+  no reinvestment, no equity, no tax effect, no comparison of cash-to-close. If a
+  scenario changes the cash to close as well, that belongs in the cash-to-close row, not
+  folded into this one.
+- **Rounding:** payments and dollar savings to the cent, rates to three decimals,
+  percentages of a loan to three decimals. Do not round a savings figure to the nearest
+  dollar in one place and the cent in another.
+- **Leftover contribution.** If the sheet's lowest rate costs less than the full
+  contribution, say the exact amount that buys the rate down, say the exact remainder,
+  and state that the remainder has no lower rate on this sheet to buy into. Do not
+  suggest where the remainder should go — where it lands is the lender's and the
+  parties' call, not this skill's.
+
 The plain-English mechanic, which is the actual content:
 
 > A price cut moves the payment a little. A credit at the closing table helps once, on
@@ -63,6 +93,14 @@ The plain-English mechanic, which is the actual content:
 Then show the down-payment ladder if the product supports it — 5% / 10% / 20% down with
 the payment and the monthly delta on each — and name the product. Many buyers do not know
 they have options below 20%, and that is often the line that gets the piece shared.
+
+**Every row below 20% down needs its own dated MI quote at that LTV.** One MI quote does
+not cover three down payments, and neither does one rate — many sheets price by LTV. If
+you have the quote for some rows and not others, show the rows you can source, leave the
+others visibly blocked with the reason, and give the agent the one line to send their
+lender. Never carry a 20%-down payment across to a 5%-down row, and never show principal
+and interest alone on a row that needs MI — it understates what the buyer actually pays,
+which is the exact failure this skill exists to prevent.
 
 ## What you must NOT do
 
@@ -76,6 +114,12 @@ they have options below 20%, and that is often the line that gets the piece shar
   and HOA. Say explicitly what is excluded.
 - Do not omit the disclaimer to make the graphic look cleaner. The disclaimer is the
   piece.
+- **Never show a temporary buydown (2-1, 3-2-1) as a single payment.** A temporary
+  buydown's payment steps up on a schedule, and showing only year one is the most
+  misleading thing this skill could produce. Show every year of the schedule and the
+  final permanent payment the buyer lands on, label which years are subsidized, and say
+  who funds the subsidy account. If you cannot source the full schedule, block it and
+  build the permanent-buydown version instead.
 
 ## The disclaimer block (mandatory, every date updated)
 

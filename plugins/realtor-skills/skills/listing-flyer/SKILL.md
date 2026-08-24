@@ -54,6 +54,12 @@ These are the ones people get wrong:
 - **300 DPI.** Render or export at 300 dots per inch at final size. A 1080px photo is a
   screen asset; it prints soft. Check the source resolution of every image before
   placing it, and say so if a photo is too small rather than placing it anyway.
+  The test is arithmetic, not taste: a photo supports `pixels / 300` inches at final
+  size. On the default letter layout the hero needs at least **2550 x 1200 px** and each
+  supporting-grid photo at least **1050 x 790 px**. Below that, name the photo, give its
+  pixel size and the largest size it can print at, and either drop it or ask for a
+  higher-resolution replacement. Never upscale it and place it anyway, and never quietly
+  shrink the whole grid to accommodate one weak file.
 - **0.25 inch bleed** on anything intended for a commercial printer; 0.5 inch safe
   margin inside the trim on all four sides. Nothing important within the safe margin.
 - **Export as PDF, not PNG or JPG.** Vector text stays sharp; rasterized text does not.
@@ -75,12 +81,26 @@ Then open the PDF and look at it. Every time.
 
 ## Before it ships
 
-- `compliance-check` on all copy. License number and brokerage present and at the size
-  the brokerage requires.
-- `source-check` on every number, including the square footage and the HOA dues.
-- If it is another agent's listing, their name and brokerage are credited, and photo
-  permission is recorded in `LISTING.md`.
-- Confirm the QR code, if present, actually resolves — scan it, do not assume it.
+Run this list in order, every time. It is a checklist, not a judgment call — a flyer that
+gets a clean pass one day and a blocked pass the next on the same inputs is the bug.
+
+1. **Profile gate.** Open `profile/AGENT.md`. If any field under Required disclosures
+   reads `TO CONFIRM WITH BROKER`, the flyer is **BLOCKED** — say which fields, route
+   them to the broker, and do not write a plausible-looking line in their place.
+2. **Profile staleness.** Compare `Last updated` in `profile/AGENT.md` against today's
+   date read off the system. More than 180 days, say so and offer a refresh — every run,
+   not just the runs that happen to open `agent-profile`. Never infer today's date.
+3. **Asset existence.** Every file path the profile names — logo, headshot — and every
+   photo the layout places must actually exist on disk. Check them; a path in a profile
+   is not a file. Missing logo or headshot blocks the bottom block, and that blocks the
+   flyer.
+4. **Photo resolution**, per the 300 DPI rule below.
+5. `compliance-check` on all copy. License number and brokerage present and at the size
+   the brokerage requires.
+6. `source-check` on every number, including the square footage and the HOA dues.
+7. If it is another agent's listing, their name and brokerage are credited, and photo
+   permission is recorded in `LISTING.md`.
+8. Confirm the QR code, if present, actually resolves — scan it, do not assume it.
 
 ## Output
 

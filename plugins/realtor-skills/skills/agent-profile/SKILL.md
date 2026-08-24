@@ -61,6 +61,14 @@ Ask for all of it in ONE message. Do not trickle-ask across five turns.
 **Partners**
 - Lender partner, title, escrow, photographer, stager, inspector — name and contact.
   Skills like `buydown-math` need to know who to ask for a rate sheet.
+- **The lender's NMLS ID**, and **the lender's pricing convention** — the exact rule for
+  reading a base rate off their sheet (for example: "the zero-cost par rate", or "the
+  rebate closest to 1.500 without going over"). `buydown-math` blocks without this, and
+  if it is missing every run picks its own rule and the same rate sheet produces
+  different payments. Ask the lender for it in one line and record their answer verbatim.
+- **The mortgage insurance provider** they quote through. Any payment below 20% down
+  needs a dated MI quote from a named provider, so without this `buydown-math` can only
+  ever show the 20%-down row.
 
 **Required disclosures**
 - The exact disclosure line their brokerage requires on marketing pieces
@@ -78,15 +86,40 @@ Write it as markdown with one `##` section per group above and one fact per line
 `Key: value` form. Machine-readable enough for other skills to parse, human-readable
 enough for the agent to correct by hand.
 
+**The section names and their order are fixed. Do not rename them, do not reorder them,
+and do not invent a new one.** Downstream skills look these up by name, so a run that
+calls it `## Track record` when the last run called it `## Production & experience`
+silently breaks every skill that reads it. The canonical list, in order:
+
+```
+## Identity and licensing
+## Reach
+## Market
+## Brand
+## Track record
+## Partners
+## Required disclosures
+## Corrections log
+```
+
+`## Track record` holds years of experience, specialty, and production numbers. Create it
+empty with `TO CONFIRM` values rather than omitting it, so the shape of the file is the
+same on every machine. If the agent asks for a field that does not belong to any section
+above, put it in the closest existing section and say where you put it — do not open a
+new section for it.
+
 End the file with:
 
 ```
 Last updated: YYYY-MM-DD
 ```
 
-and a `## Corrections log` section — one dated line each time a downstream skill was
-told something in this file was wrong. That log is how the profile gets more accurate
-instead of drifting.
+and a `## Corrections log` section. **Append one dated line for every change you make in
+a run, every time, including the run that creates the file** — what changed, from what to
+what, and who said so. Also log it when a downstream skill is told something in this file
+is wrong. That log is how the profile gets more accurate instead of drifting, and a run
+that edits the file without writing the line has broken it. Set `Last updated` to today's
+date read from the system, never a date you inferred from the contents of the file.
 
 ## Guardrails
 
@@ -100,10 +133,15 @@ instead of drifting.
 ## Downstream
 
 These skills read `profile/AGENT.md` and will stop and route here if it is missing:
-`listing-intake`, `listing-flyer`, `listing-carousel`, `listing-description`,
-`open-house-flyer`, `open-house-signin`, `market-brief`, `market-carousel`,
-`sphere-message`, `followup-sequence`, `social-caption`, `meeting-brief`,
-`compliance-check`.
+`agent-voice`, `birthday-watch`, `buydown-math`, `carousel-render`, `compliance-check`,
+`followup-sequence`, `home-anniversary`, `listing-carousel`, `listing-description`,
+`listing-flyer`, `listing-package`, `market-brief`, `market-carousel`,
+`market-update-package`, `open-house-flyer`, `open-house-followup`,
+`open-house-package`, `open-house-signin`, `social-caption`, `sphere-message`.
+
+If you add or remove a reader, update this list in the same edit. It was wrong in both
+directions on 2026-08-24 — it named two skills that never read the file and omitted nine
+that do, including `buydown-math`, the one with real compliance exposure.
 
 ---
 
