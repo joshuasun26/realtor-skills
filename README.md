@@ -56,16 +56,14 @@ one-time setup and it is the first thing covered in your install session.
 
 ### Step 3 — Add the library
 
-Below is a fill-in-the-blank command, not something to type as-is. Whoever is running
-your install session will tell you the exact line to type, or type it for you — it
-will look like this, with a real address in place of the all-caps part:
+Type this exactly as it appears and press Enter:
 
 ```
-/plugin marketplace add [ADDRESS YOUR INSTALL SESSION GIVES YOU]
+/plugin marketplace add joshuasun26/realtor-skills
 ```
 
-Type the real version exactly and press Enter. You should see a confirmation that the
-marketplace was added.
+You should see a confirmation that the marketplace was added. If it says it cannot
+find it, check the spelling, there is no www and no .com in that line.
 
 ### Step 4 — Install it
 

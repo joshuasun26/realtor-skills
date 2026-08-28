@@ -9,6 +9,21 @@ hasn't shipped to an outside client so there's nothing to version against.
 
 ---
 
+## 2026-08-28
+
+Install-path fix. No skill changes, skill count unchanged at 33.
+
+- **Step 3 of the README is now a real command instead of a blank to fill in.** It read
+  `/plugin marketplace add [ADDRESS YOUR INSTALL SESSION GIVES YOU]`, which meant nobody
+  could install the library without a person on the other end telling them the address.
+  The repo has been public since 2026-08-22, so the address is not a secret and the line
+  is now `/plugin marketplace add joshuasun26/realtor-skills`, typed as-is. Added the one
+  failure people actually hit, which is adding www or .com to it.
+- **Atlas rebuilt and confirmed stable at 33 skills, 7 departments, 209 connections.**
+  A second run produced a byte-identical file, so the build is deterministic.
+
+---
+
 ## 2026-08-24
 
 Eval pass on the three chain skills that had never been run, plus the fixes they turned
