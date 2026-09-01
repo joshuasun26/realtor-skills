@@ -11,8 +11,14 @@ hasn't shipped to an outside client so there's nothing to version against.
 
 ## 2026-09-01
 
-Four new skills and a three-level upgrade to birthday-watch, built for the Week 6
-bootcamp session ("the skills buffet"). Skill count 33 → 37.
+Five new skills and a three-level upgrade to birthday-watch, built for the Week 6
+bootcamp session ("The Most Important Skill of the Future"). Skill count 33 → 38.
+
+- **`computer-revive` (new, Foundation).** For the machine that crawls by 2pm: measures
+  RAM and top consumers first, classifies before closing anything (safe / ask-first /
+  never-touch), kills only what the agent approves, re-measures and reports the before
+  and after, and teaches one prevention habit per run. Windows and Mac paths. Honest
+  rail: on 8GB or less it says hardware is the ceiling.
 
 - **`social-scan` (new, Pipeline).** A daily Instagram lead scan: reads new followers,
   story viewers, and post engagers, classifies each (fellow agent, buyer signal, seller
