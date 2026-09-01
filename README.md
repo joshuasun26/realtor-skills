@@ -21,8 +21,8 @@ client information stay on your machine.
 | **Open House** | Digital sign-in page and QR code, event flyer, neighbor invitations, follow-up |
 | **Market** | Pulling your MLS numbers, the monthly client brief, the stats carousel |
 | **Sphere** | Database audit, birthdays, home anniversaries, your daily contact list |
-| **Pipeline** | New leads, follow-up cadences, the daily follow-up queue, meeting prep |
-| **Content** | Captions, slide rendering, the weekly content plan |
+| **Pipeline** | New leads, follow-up cadences, the daily follow-up queue, meeting prep, the daily Instagram lead scan |
+| **Content** | Captions, slide rendering, the weekly content plan, the Instagram audit, video editing (talking-head reels and event recaps) |
 
 Small pieces that snap together. If you only want a flyer, ask for a flyer. If you want
 everything for a new listing, ask for the full package and it runs all the pieces in

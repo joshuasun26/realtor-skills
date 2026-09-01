@@ -9,6 +9,39 @@ hasn't shipped to an outside client so there's nothing to version against.
 
 ---
 
+## 2026-09-01
+
+Four new skills and a three-level upgrade to birthday-watch, built for the Week 6
+bootcamp session ("the skills buffet"). Skill count 33 → 37.
+
+- **`social-scan` (new, Pipeline).** A daily Instagram lead scan: reads new followers,
+  story viewers, and post engagers, classifies each (fellow agent, buyer signal, seller
+  signal, sphere contact re-engaging), and drafts up to 5 first DMs in the agent's own
+  voice. Works from a logged-in browser session or pasted screenshots — no Instagram API,
+  no scraping of private accounts, nothing auto-sends.
+- **`social-audit` (new, Content).** A one-command audit of the agent's own Instagram:
+  content mix, cadence, what performed and what didn't, three do-more, three stop, and a
+  one-week plan shaped for `content-week`. Three input paths (Insights screenshots,
+  logged-in browse, public grid) and it states which one it used. Hard grounding rail:
+  no performance claim without a named post and a visible number.
+- **`video-talking-head` (new, Content).** One raw phone clip in, a finished vertical
+  reel out: transcript-driven cuts on word boundaries, captions that never cover the
+  face, loudness-normalized audio, an on-screen hook. First run calibrates and locks the
+  agent's style into `profile/VIDEO-STYLE.md`; every later run reads it silently.
+- **`video-event-recap` (new, Content).** A folder of event or open-house clips in, a
+  30-60 second recap reel out, with honest clip triage (skipped clips are named, with
+  why) and a property variant that closes on the address card from `profile/AGENT.md`.
+- **`birthday-watch` upgraded: wider sources and three notification levels.** New
+  sources: phone .vcf and CRM refresh (via `contact-import`), a guided Facebook
+  birthdays read, and a paste-in path for anything else — discovered birthdays get
+  written back into `contacts.csv`. New levels: Level 1 emails the daily brief to the
+  agent themselves, Level 2 texts it from the agent's own CRM number (Lofty reference
+  included, add-yourself-as-a-lead setup), Level 3 is the full dictate-a-reply loop.
+  The hard rail is unchanged at every level: nothing goes to a contact without the
+  agent's explicit go for that specific message.
+
+---
+
 ## 2026-08-28
 
 Install-path fix. No skill changes, skill count unchanged at 33.

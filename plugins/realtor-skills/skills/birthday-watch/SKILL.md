@@ -93,6 +93,131 @@ biggest limiter on this skill. Tell the agent the count, then give them one prac
 to collect more — asking at closing, adding the field to the open house sign-in, or
 capturing them from conversations as they happen. One method, not five.
 
+## Wider birthday sources
+
+`data/contacts.csv` is the read for the daily scan, but it is rarely the only place an
+agent's birthdays live. When the agent wants to grow the file rather than wait on
+one-at-a-time capture, offer these, one at a time, not all five in a wall of text:
+
+1. **Phone contacts (.vcf).** If they export their phone contacts as a vCard, that is a
+   `contact-import` job, not this skill's — send them there. `contact-import` already
+   normalizes vCard `BDAY` fields into the `MM-DD` / `YYYY-MM-DD` schema this skill reads.
+   Once re-imported, re-run this skill and the new birthdays are live.
+2. **CRM birthday field, via export refresh.** Most CRMs (Lofty, Follow Up Boss, KW
+   Command, etc.) have a birthday field that never gets surfaced anywhere. Ask the agent
+   to pull a fresh CRM export and hand it to `contact-import` the same way. This is a
+   refresh, not a first import — `contact-import`'s dedupe-on-conflict rule already keeps
+   the more recently touched record, so re-running it is safe.
+3. **Facebook birthdays.** If the agent has a logged-in browser session available to
+   Claude, browse to `facebook.com/events/birthdays` and read the day's and week's names
+   directly off the page. Match each name against `data/contacts.csv` by first+last name
+   (fall back to a fuzzy match and confirm with the agent on anything uncertain — never
+   silently guess an identity match). If no logged-in session is available, tell the agent
+   plainly: "I can't reach Facebook from here — open facebook.com/events/birthdays
+   yourself and paste me the names for today and this week."
+4. **WhatsApp, WeChat, or anything else.** Same paste-in path as Facebook: the agent opens
+   whatever app holds the birthday and pastes the names (and dates, if visible) into the
+   chat. Claude never needs API access to these — a pasted list is enough to work with.
+
+**Write discovered birthdays back into `data/contacts.csv`.** Whether a birthday came from
+a vCard re-import, a CRM refresh, a Facebook scan, or a pasted list, the point is that the
+file gets richer over time instead of this being a one-off lookup. Match the new birthday
+to an existing `contact_id` where one exists (same dedupe logic as `contact-import`: phone,
+then email, then exact first+last+city); if the person is not yet in the file at all, ask
+the agent whether to add them as a new row rather than silently creating one. Report what
+was added: "found 4 new birthdays from Facebook, wrote them into contacts.csv."
+
+## Notification levels — how the daily result reaches the agent
+
+The scan itself does not change across levels — same file, same read, same drafting rules
+above. **Levels only change how today's brief gets in front of the agent**, and whether it
+goes further than that. Ask the agent once, at setup, which level they want, and record the
+choice in `profile/AGENT.md` so future runs do not have to ask again.
+
+### Level 1 — Notify (everyone, day one)
+
+The run writes the daily birthday brief — who, the relationship, their number, the drafted
+message for each — same format as the existing approval-batch file. Delivery:
+
+- If the agent has a mail connector connected in their Claude Code, draft and send an
+  email **to the agent's own address** with the brief. This is Claude emailing the agent,
+  not the agent's contacts — it needs no approval gate, since nothing is going to a third
+  party.
+- If no mail connector is connected, leave the brief file open and tell the agent plainly
+  where it is and that it's ready for review.
+
+This works on iPhone and Android and needs no phone number, no CRM, and no API key. It is
+where every agent starts.
+
+### Level 2 — Text me the list (needs a CRM number, e.g. Lofty)
+
+For agents on a CRM with its own SMS-sending number, the skill can text the daily brief
+**to the agent** from that number instead of (or alongside) the email.
+
+**Lofty reference** (the CRM most of this library's agents use):
+
+- API key: agent generates one in Lofty under **Settings > Integrations > API**. Docs at
+  `developer.lofty.com`.
+- Send endpoint: `POST /v1.0/message/sms/send`. This endpoint sends to a *lead*, not to an
+  arbitrary phone number — so the one-time setup is: the agent adds **themselves** as a
+  lead in Lofty with their own cell number.
+- Store that lead's id as `leadId` in `profile/AGENT.md` under a `Birthday Watch` section,
+  once, at setup. Every daily run reads it from there rather than asking again.
+- If the API key or `leadId` is missing when this level is requested, stop and get them
+  before the first send — do not guess or fall back to a channel the agent didn't ask for.
+
+**Other CRMs.** If the agent's CRM has its own SMS-send API, the same pattern applies:
+find the CRM's own docs (ask Claude to check them), find the equivalent of "add myself as
+a recipient" and "send" endpoints, and store whatever id that CRM needs in
+`profile/AGENT.md` the same way. Do not assume Lofty's exact shape carries over — verify
+against that CRM's own documentation before wiring anything.
+
+### Level 3 — Full loop (advanced)
+
+**This is real plumbing. Expect to iterate on it before it feels smooth.** It is exactly
+what Joshua sets up for clients in his 1:1 installs, and it is the right level for an agent
+who wants to reply to the Level 2 text with a dictated birthday message and have it go out
+without opening a laptop.
+
+The loop:
+
+1. The agent replies to the Level 2 text with a birthday message, dictated or typed.
+2. A watcher — a scheduled Claude run polling
+   `GET /v2.0/leads/{leadId}/activities` for inbound texts, or a webhook registered via
+   `POST /v1.0/webhook` with event type `Text` — picks up that reply.
+3. The watcher **always echoes back what it is about to send and to whom** before sending
+   anything to the actual contact, and only fires on an explicit "send" (or equivalent
+   clear go) in the agent's reply. A dictated draft that doesn't say "send" is held, not
+   sent.
+4. Once confirmed, the watcher sends the birthday text to the actual contact using the
+   same `POST /v1.0/message/sms/send` endpoint, this time targeting the contact's own
+   `leadId` (or the CRM equivalent), not the agent's.
+
+**Known Lofty caveats to plan around:**
+- Webhooks do not fire for `AUTO` communications — only for genuine inbound activity.
+- The webhook callback URL must be HTTPS.
+
+Mark this level plainly to the agent as advanced: it involves a second moving part (the
+watcher) that has to stay scheduled and healthy, and it is worth setting up once it's clear
+Level 1 or 2 is actually being used.
+
+### The hard rail — unchanged at every level
+
+**Messages to CONTACTS only go out after the agent's explicit go for that specific
+message**, exactly as in the base skill above — this does not change no matter which
+notification level is running. Level 1 and Level 2 deliveries are notifications *to the
+agent themselves* about their own day; those are not gated, because nothing is reaching a
+third party. The gate is on the outbound birthday message to the contact, always.
+
+## Cadence
+
+Run this daily, in the morning, before the agent's day starts — birthdays are the one item
+on `sphere-daily` that is time-bound (today or nothing), so a scan that runs at noon has
+already missed half its value.
+
+To have Claude run it automatically, ask: "schedule my birthday check every morning at
+[time]." That is a `schedule` skill job, not something this skill sets up itself.
+
 ## Chains from / into
 
 Called by `sphere-daily`. Reads `contact-import` output and `agent-voice`. Sits alongside
