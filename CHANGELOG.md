@@ -9,6 +9,34 @@ hasn't shipped to an outside client so there's nothing to version against.
 
 ---
 
+## 2026-09-02 (later)
+
+One new skill and the Week 6 page material, moved into the repo so the site copy and the
+library cannot drift apart. Skill count 43 -> 44. Plugin version 0.3.0 -> 0.4.0 in both
+manifests.
+
+- **`safe-autonomy` (new, Foundation).** "Stop asking me permission." Turns off the
+  permission prompts without removing the stops that matter, in three layers: a `deny`
+  list the machine refuses outright, an `ask` list that keeps prompting even under bypass
+  mode for anything that sends, posts, deploys or spends, and the standing rules in
+  `CLAUDE.md` for the judgment no setting can enforce. Three preconditions before the
+  switch is flipped (a dedicated working folder, git as the undo layer, an off-machine
+  backup that has actually run), and a five-test drill the agent runs with their own
+  hands at the end. Honest rails: bypass mode does not make Claude careful, does not undo
+  anything, does not sandbox the folder, and is not for a brokerage-managed laptop. The
+  middle layer is the one people leave out and the one that catches the real failure,
+  which is not a deleted folder but a reasonable-looking message reaching the wrong list.
+  Layer 2 is verified with a live `git push --dry-run` before the setup is called done,
+  because a missing prompt and a misspelled tool name look identical from the outside.
+- **`docs/week-6/` (new).** The Week 6 material that has to stay in sync with the library:
+  the verified install-section page copy (Mac git step, the paste block that works in the
+  desktop app, the restart, the update path, the bracket-placeholder fix) and the AI tools
+  and skills page redesign notes, with unbuilt sections labeled unbuilt rather than
+  described as live.
+- **README.** The Foundation row names the new skill.
+
+---
+
 ## 2026-09-02
 
 Four new skills, all Foundation, built so a Private Install session spends its minutes on
