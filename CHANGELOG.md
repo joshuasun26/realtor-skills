@@ -9,6 +9,22 @@ hasn't shipped to an outside client so there's nothing to version against.
 
 ---
 
+## 2026-09-01 (later)
+
+One new skill for the Week 6 bootcamp session. Skill count 38 -> 39.
+
+- **`ghl-setup` (new, Pipeline).** Wires GoHighLevel up as the CRM, texting number, inbox
+  and automation rail the rest of the library runs on, in an order that proves each step
+  before starting the next. The agent's own hands stay on every password, payment, consent
+  screen and verification code; Claude opens the page, names the button and waits. Three
+  levels so nothing is promised before it is proven: the app on day one, Claude reading the
+  account, then Claude drafting on the agent's go. Honest rails throughout - US texts do not
+  deliver until A2P clears and that takes days, synced email covers only threads that start
+  from the CRM or from contacts already in it, and workflows are built by talking to
+  GoHighLevel's own builder because there is no write API for them.
+
+---
+
 ## 2026-09-01
 
 Five new skills and a three-level upgrade to birthday-watch, built for the Week 6
