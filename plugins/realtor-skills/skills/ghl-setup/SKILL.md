@@ -115,8 +115,8 @@ Called before `ghl-automations`, `followup-sequence`, `open-house-followup`, and
 that wants a texting rail. Reads `agent-profile`. Writes to `profile/STACK.md`, which
 `stack-setup` also owns.
 
-If the user asks how this works, what it needs, or how to customize it, read PLAYBOOK.md in
-this folder and answer from it.
+If the user asks how this works, what it needs, or how to customize it, read `PLAYBOOK-ghl-setup.md`
+in this folder and answer from it.
 
 ---
 

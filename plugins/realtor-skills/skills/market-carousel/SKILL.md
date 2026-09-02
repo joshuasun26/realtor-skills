@@ -71,6 +71,27 @@ One HTML file per slide, headless-browser render to PNG, output to
 **Open the rendered PNGs and look at them.** Numbers with more digits than the template
 expected are the most common overflow, and a clipped median price is worse than no post.
 
+**Then judge the photography, not just the layout.** Every automated check asks whether a slide
+is broken. None asks whether it is any good, and a dull image passes all of them. For each slide:
+
+- **Is the subject identifiable as this city?** A pleasant photograph that could be any suburb has
+  failed. Name the landmark it reads as, or say none.
+- **Is there a subject at all?** A blank wall, a hedge, a patch of sky or an empty sidewalk is
+  texture, not a place.
+- **Does it survive as a thumbnail?** Interest that lives in fine detail disappears at phone size.
+- **Is there usable negative space** where the text block lands, so the good part is not buried
+  under it.
+- **Do the slides vary?** Eight golden-hour facades is one photograph shown eight times.
+
+Verdict per slide is KEEP or REPLATE with the subject to shoot instead. "Looks fine" is not a
+verdict.
+
+**Imagery rules, all hard.** Text-free, because models garble lettering and the data is composited
+by the render anyway. **No identifiable people** - real estate imagery showing people can signal
+demographic preference, which is a fair-housing problem. No schools and no places of worship, even
+when one is the city's most famous building; substitute a civic landmark and write the exclusion
+down so it is not quietly re-added on a later pass.
+
 ## Reuse
 
 Save the template HTML with the data separated out, so next month is a data swap and a
