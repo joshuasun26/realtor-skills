@@ -9,6 +9,48 @@ hasn't shipped to an outside client so there's nothing to version against.
 
 ---
 
+## 2026-09-02
+
+Four new skills, all Foundation, built so a Private Install session spends its minutes on
+the agent's business instead of on setup and support. Skill count 39 -> 43. Plugin version
+0.2.0 -> 0.3.0 in both manifests, so installed copies with auto-update on actually receive
+it. First non-prose files in the plugin: five small scripts under
+`skills/voice-command/scripts/`.
+
+- **`preflight` (new, Foundation).** "Check my setup." Runs every tool check the library
+  quietly depends on (Claude Code and the paid plan, the working folder and profile, git,
+  Python, the render browser, ffmpeg, disk, memory, plugin auto-update), reports one
+  table, offers each missing install one at a time with a yes required, and sorts the
+  library into run it now, run it if you brought the thing, and tonight after an install.
+  Installs nothing on a managed laptop that refuses; hands over the IT note instead.
+- **`voice-command` (new, Foundation).** The texting wire to the agent's own phone:
+  iMessage self-thread on a Mac, a Telegram bot on Windows, and the send scripts have no
+  recipient argument so the worst a bug can do is text the agent. Three levels: the
+  morning brief, the loop where they text work back, then dispatch on a numbered go. The
+  Mac loop-guard check happens live before any poll is scheduled, the awake problem is
+  said out loud, and a scheduled run is the only thing that counts as done. Ships the
+  five scripts (Telegram send and poll, iMessage send, read, poll) that were previously
+  copied by hand from a starter kit. Honest rail: the Telegram poll was checked against a
+  recorded payload, not a live bot, so its first live round trip is done in the room.
+- **`wire-a-tool` (new, Foundation).** "Connect [tool] to Claude." A five-rung ladder
+  (official connector, API key, CSV export, browser read, paste) that stops at the first
+  rung that works on the agent's plan and machine, and never says it cannot be done.
+  Carries the Asana connector command and token path as read from Asana's developer
+  pages on 2026-09-02, and flags the Lofty API key path as unverified because the help
+  page refused a direct read two days running. Writes `profile/TOOLS.md`, no secrets.
+- **`owners-manual` (new, Foundation).** "Write my owner's manual." The system reads the
+  machine (profile, data counts, the wire, scheduled tasks and their last run, the plugin
+  version) and writes the manual from what is there, with the six things that break in
+  the first three weeks and their fixes, and a five-minute drill the agent does with
+  their own hands. Reads only; prints no secret; leaves the support section blank rather
+  than invent it.
+- **Playbooks.** Each new skill ships with a client-facing playbook in its own folder
+  (`PLAYBOOK-<name>.md`), in the Week 6 template, labeled "Example shape, not a real
+  run" because none of the four has been run on a client machine yet.
+- **README.** The Foundation row names the four new skills.
+
+---
+
 ## 2026-09-01 (later)
 
 One new skill for the Week 6 bootcamp session. Skill count 38 -> 39.

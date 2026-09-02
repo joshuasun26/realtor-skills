@@ -16,7 +16,7 @@ client information stay on your machine.
 
 | Department | What it handles |
 |---|---|
-| **Foundation** | Your profile, your writing voice, fact checking, fair housing review, importing your contacts |
+| **Foundation** | Your profile, your writing voice, fact checking, fair housing review, importing your contacts, checking what your laptop can run, the texting wire to your own phone, connecting the tools you already use, and your owner's manual |
 | **Listings** | Property intake, MLS remarks, print flyers, social carousels, rate buydown math |
 | **Open House** | Digital sign-in page and QR code, event flyer, neighbor invitations, follow-up |
 | **Market** | Pulling your MLS numbers, the monthly client brief, the stats carousel |
